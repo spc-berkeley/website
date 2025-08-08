@@ -49,7 +49,7 @@
       display: inline-block; background: var(--cal-gold); color: var(--cal-blue);
       padding: 1rem 2rem; border-radius: 50px; font-weight: 600;
       transition: transform .4s, box-shadow .4s; border: none; font-size: 1rem;
-      position: relative; overflow: hidden; cursor: pointer;
+      position: relative; overflow: hidden; cursor: pointer; text-decoration: none;
     }
     .cta-button::before { content: ''; position: absolute; inset: 0; left: -100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,.2), transparent); transition: left .5s; }
     .cta-button:hover::before { left: 100%; }
@@ -82,7 +82,7 @@
     .hero h1 { font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 700; margin-bottom: 1rem; line-height: 1.2; opacity: 0; transform: translateY(30px); animation: heroFadeInUp 1s ease .3s forwards; }
     .hero-subtitle { font-size: 1.5rem; margin-bottom: 2rem; color: var(--cal-gold); font-weight: 600; opacity: 0; transform: translateY(30px); animation: heroFadeInUp 1s ease .6s forwards; }
     .hero p { font-size: 1.2rem; margin-bottom: 2rem; max-width: 700px; line-height: 1.6; opacity: 0; transform: translateY(30px); animation: heroFadeInUp 1s ease .9s forwards; }
-    .hero .cta-button { opacity: 0; transform: translateY(30px); animation: heroFadeInUp 1s ease 1.2s forwards; }
+    .hero .cta-button { opacity: 0; transform: translateY(30px); animation: heroFadeInUp 1s ease 1.2s forwards; text-decoration: none; }
 
     /* Content */
     .content-section { padding: 5rem 2rem; }
@@ -119,6 +119,27 @@
     .section-tag { color: var(--cal-blue); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1rem; font-size: .9rem; }
     .split-title { font-size: 2.2rem; font-weight: 700; color: var(--text-dark); margin-bottom: 2rem; line-height: 1.2; }
     .split-description { font-size: 1.1rem; color: var(--text-light); margin-bottom: 2rem; line-height: 1.6; }
+
+    /* Learn More link with navy text and yellow underline */
+    .learn-more-btn {
+      color: var(--cal-blue);
+      font-weight: 600;
+      text-decoration: underline;
+      text-decoration-color: var(--cal-gold);
+      text-decoration-thickness: 2px;
+      text-underline-offset: 4px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+    .learn-more-btn:hover {
+      color: var(--light-blue);
+      text-decoration-color: var(--light-blue);
+    }
+
+    .contact-info { margin-top: 1rem; font-size: 1rem; color: var(--text-dark); }
+    .contact-info strong { color: var(--cal-blue); font-weight: 600; }
+    .contact-info a { color: var(--light-blue); text-decoration: underline; font-weight: 500; transition: color 0.3s ease; }
+    .contact-info a:hover { color: var(--cal-blue); }
 
     /* About section */
     .about-section { background: var(--bg-light); }
@@ -216,7 +237,7 @@
       <h2 class="split-title">The best undergraduate team for your next project</h2>
       <p class="split-description">Partner with SPC for client projects, sponsorship opportunities, or recruitment events. Access high-achieving UC Berkeley consultants with our 100% satisfaction guarantee.</p>
       <div style="margin-top: 2rem;">
-        <a href="sponsorship.pdf" target="_blank" class="cta-button" style="margin-right: 1rem;">Download Sponsorship Package</a>
+        <a href="sponsorship.pdf" target="_blank" class="cta-button" style="margin-right: 1rem; text-decoration: none;">Download Sponsorship Package</a>
         <div class="contact-info">
           <strong>Contact us:</strong> <a href="mailto:ispma.berkeley@gmail.com">ispma.berkeley@gmail.com</a>
         </div>
