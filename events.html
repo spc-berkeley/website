@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Events & Programs | SPC - Software Products @Cal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --cal-blue: #003262;
+      --cal-gold: #FDB515;
+      --light-blue: #4285f4;
+      --text-dark: #1f2937;
+      --text-light: #6b7280;
+      --bg-light: #f8fafc;
+      --white: #ffffff;
+      --shadow: 0 25px 60px -10px rgba(0,0,0,0.08);
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      line-height: 1.6;
+      color: var(--text-dark);
+      overflow-x: hidden;
+      background: white;
+    }
+
+    /* Header */
+    header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      z-index: 1000;
+      transition: all 0.3s ease;
+      border-bottom: 1px solid rgba(59, 130, 246, 0.1);
+    }
+
+    nav {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--cal-blue);
+      text-decoration: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+    }
+
+    .logo img {
+      height: 40px;
+      width: auto;
+    }
+
+    .nav-links {
+      display: flex;
+      list-style: none;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    .nav-links li {
+      display: flex;
+      align-items: center;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--text-dark);
+      font-weight: 500;
+      transition: color 0.3s ease;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .nav-links a:hover {
+      color: var(--light-blue);
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--cal-gold);
+      transition: width 0.3s ease;
+    }
+
+    .nav-links a:hover::after, .nav-links a.active::after {
+      width: 100%;
+    }
+
+    /* CTA (used in main content and header) */
+    .cta-button {
+      display: inline-block;
+      background: var(--cal-gold);
+      color: var(--cal-blue);
+      padding: 1rem 2rem;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+      cursor: pointer;
+      border: none;
+      font-size: 1rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-button::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      left: -100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.2), transparent);
+      transition: left .5s;
+    }
+
+    .cta-button:hover::before {
+      left: 100%;
+    }
+
+    .cta-button:hover {
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 15px 35px rgba(253, 181, 21, 0.4);
+    }
+
+    /* 🔒 No animation/effects for header Join Us */
+    .nav-links .cta-button,
+    .nav-links .cta-button:hover {
+      transition: none;
+      transform: none;
+      box-shadow: none;
+      opacity: 1;
+      animation: none;
+      padding: 0.5rem 1rem;   /* match compact header size */
+      font-size: 0.85rem;
+    }
+
+    .nav-links .cta-button::before,
+    .nav-links .cta-button::after {
+      display: none;
+    }
+
+    .mobile-menu-btn {
+      display: none;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      color: var(--cal-blue);
+      cursor: pointer;
+    }
+
+    /* Main content */
+    main {
+      padding-top: 8rem;
+    }
+
+    .content-section {
+      padding: 5rem 2rem;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .section-title {
+      text-align: center;
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 3rem;
+      color: var(--cal-blue);
+      position: relative;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.8s ease;
+    }
+
+    .section-title.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 4px;
+      background: var(--cal-gold);
+      border-radius: 2px;
+    }
+
+    .about-content {
+      font-size: 1.1rem;
+      text-align: center;
+      max-width: 800px;
+      margin: 0 auto 3rem;
+      color: var(--text-light);
+    }
+
+    .section {
+      margin-top: 3rem;
+    }
+
+    /* Timeline card */
+    .card {
+      background: white;
+      border-radius: 20px;
+      padding: 2rem 2.5rem;
+      box-shadow: var(--shadow);
+      position: relative;
+      margin-bottom: 2.5rem;
+      overflow: visible;
+      margin-left: auto;
+      margin-right: auto;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.8s ease;
+    }
+
+    .card.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .timeline-title {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--cal-blue);
+      margin-bottom: 2rem;
+      text-align: center;
+      position: relative;
+    }
+
+    .timeline-wrapper {
+      position: relative;
+      padding: 4rem 0 4rem; /* extra space for zigzag layout */
+    }
+
+    .timeline-line {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: 5px;
+      background: var(--cal-gold);
+      border-radius: 3px;
+      z-index: 3;
+      transform: translateY(-50%);
+    }
+
+    .timeline-items {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+      height: 200px;
+    }
+
+    .timeline-item {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex: 1;
+      text-align: center;
+      max-width: 140px;
+      height: 100%;
+      justify-content: center;
+    }
+
+    .timeline-item:nth-child(odd) .timeline-content {
+      position: absolute;
+      bottom: 12px;
+    }
+
+    .timeline-item:nth-child(even) .timeline-content {
+      position: absolute;
+      top: 12px;
+    }
+
+    .timeline-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      white-space: nowrap;
+    }
+
+    .timeline-bullet {
+      width: 18px;
+      height: 18px;
+      border: 3px solid var(--cal-gold);
+      border-radius: 50%;
+      background: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 4;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .timeline-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .timeline-date {
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: var(--cal-blue);
+      margin-bottom: 0.25rem;
+      line-height: 1.2;
+    }
+
+    .timeline-desc {
+      font-size: 0.85rem;
+      color: var(--text-light);
+      line-height: 1.3;
+    }
+
+    .timeline-note {
+      font-size: 0.75rem;
+      color: var(--text-light);
+      font-style: italic;
+      position: absolute;
+      right: 1rem;
+      bottom: 0.5rem;
+      text-align: right;
+    }
+
+    /* Summit card */
+    .project-card {
+      background: white;
+      border-radius: 20px;
+      padding: 2rem 2.5rem;
+      box-shadow: var(--shadow);
+      margin-top: 1.5rem;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.8s ease;
+    }
+
+    .project-card.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .project-meta {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      margin-bottom: 0.75rem;
+    }
+
+    .project-tag {
+      background: rgba(227, 233, 246, 1);
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--cal-blue);
+      letter-spacing: .5px;
+    }
+
+    .project-title {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin: 8px 0;
+      color: var(--cal-blue);
+      text-decoration: none;
+      transition: color 0.3s ease;
+      display: inline-block;
+    }
+
+    .project-title:hover {
+      color: var(--light-blue);
+    }
+
+    .project-summary {
+      font-size: 1rem;
+      margin-bottom: 1rem;
+      color: #555d71;
+    }
+
+    .project-list {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .project-list li {
+      margin-bottom: 6px;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      font-size: 0.95rem;
+      color: var(--text-dark);
+    }
+
+    .project-list li::before {
+      content: '→';
+      color: var(--cal-gold);
+      font-weight: 700;
+      margin-top: 3px;
+      font-size: 0.9rem;
+    }
+
+    /* Footer */
+    footer {
+      background: var(--cal-blue);
+      color: white;
+      padding: 3rem 2rem 1rem;
+    }
+
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .footer-main {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+      margin-bottom: 2rem;
+      width: 100%;
+    }
+
+    .footer-content-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      max-width: fit-content;
+    }
+
+    .footer-logo {
+      flex-shrink: 0;
+    }
+
+    .footer-logo img {
+      height: 60px;
+      width: auto;
+    }
+
+    .footer-text {
+      opacity: 0.8;
+      font-size: 1rem;
+      line-height: 1.6;
+      text-align: left;
+    }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      padding-top: 1rem;
+      margin-top: 2rem;
+      opacity: 0.6;
+      text-align: center;
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 992px) {
+      .timeline-items {
+        flex-wrap: wrap;
+        gap: 1.5rem;
+      }
+
+      .timeline-item {
+        max-width: 120px;
+      }
+
+      .timeline-date {
+        font-size: 0.85rem;
+      }
+
+      .timeline-desc {
+        font-size: 0.8rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .nav-links {
+        flex-direction: column;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background: rgba(255, 255, 255, 0.98);
+        backdrop-filter: blur(10px);
+        padding: 1rem 2rem;
+        display: none;
+        align-items: flex-start;
+      }
+
+      .nav-links.mobile-open {
+        display: flex;
+      }
+
+      .mobile-menu-btn {
+        display: block;
+      }
+
+      .section-title {
+        font-size: 2rem;
+      }
+
+      .card {
+        padding: 1.5rem;
+      }
+
+      .project-card {
+        padding: 1.5rem;
+      }
+
+      .timeline-items {
+        flex-direction: column;
+        gap: 2rem;
+        height: auto;
+      }
+
+      .timeline-item:nth-child(odd),
+      .timeline-item:nth-child(even) {
+        margin-top: 0;
+        align-items: center;
+      }
+
+      .timeline-item:nth-child(odd) .timeline-content,
+      .timeline-item:nth-child(even) .timeline-content {
+        order: 2;
+        margin-top: 1rem;
+        margin-bottom: 0;
+      }
+
+      .timeline-item:nth-child(odd) .timeline-bullet,
+      .timeline-item:nth-child(even) .timeline-bullet {
+        order: 1;
+        margin-bottom: 0;
+      }
+
+      .timeline-line {
+        display: none;
+      }
+
+      .timeline-item {
+        max-width: 100%;
+      }
+
+      .footer-main {
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+      }
+
+      .footer-content-wrapper {
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+      }
+
+      .footer-text {
+        text-align: center;
+      }
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav>
+      <a class="logo" href="index.html">
+        <img src="assets/img/spc-logo.png" alt="SPC Logo">
+      </a>
+      <button class="mobile-menu-btn" onclick="toggleMobileMenu()">☰</button>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html" class="nav-link">Home</a></li>
+        <li><a href="about.html" class="nav-link">About</a></li>
+        <li><a href="students.html" class="nav-link">Students</a></li>
+        <li><a href="projects.html" class="nav-link">Projects</a></li>
+        <li><a href="team.html" class="nav-link">Team</a></li>
+        <li><a href="events.html" class="nav-link active">Events</a></li>
+        <li><a class="cta-button" href="https://forms.gle/your-form-id" target="_blank" rel="noopener">Join Us</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section class="content-section">
+      <div class="container">
+        <h2 class="section-title">Events & Programs</h2>
+        <div class="about-content">
+          <p>Stay engaged through workshops, networking, and community events.</p>
+        </div>
+        <!-- Summit Event -->
+        <div class="section">
+          <div class="project-card">
+            <div class="project-meta">
+              <div class="project-tag">Annual Summit</div>
+              <div class="project-tag">September 10th 2025</div>
+              <div class="project-tag">Professional Development</div>
+            </div>
+            <a href="https://spmsummit.org/northamerica" target="_blank" rel="noopener" class="project-title">North American Software Product Management Summit</a>
+            <div class="project-summary">Join experts and leaders to advance SPM and share best practices.</div>
+            <ul class="project-list">
+              <li>Keynotes from major tech companies</li>
+              <li>Workshops & panels</li>
+              <li>Networking sessions</li>
+              <li>Trends & innovations</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-main">
+        <div class="footer-content-wrapper">
+          <div class="footer-logo">
+            <img src="assets/img/spc-logo-full.png" alt="SPC Full Logo">
+          </div>
+          <div class="footer-text">
+            Berkeley Chapter of the International Software Product Management Association (ISPMA)<br>
+            Empowering the next generation of product managers through education, experience, and community.
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 SPC - Software Products @Cal. All rights reserved. |
+          <a href="mailto:ispma.berkeley@gmail.com" style="color: var(--cal-gold); text-decoration: none;">Contact</a>
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function toggleMobileMenu() {
+      const navLinks = document.getElementById('navLinks');
+      navLinks.classList.toggle('mobile-open');
+    }
+
+    // Header scroll effect
+    window.addEventListener('scroll', function() {
+      const header = document.querySelector('header');
+      if (window.scrollY > 50) {
+        header.style.backgroundColor = 'rgba(255, 255, 255, 0.98)';
+      } else {
+        header.style.backgroundColor = 'rgba(255, 255, 255, 0.95)';
+      }
+    });
+
+    // Reveal-on-scroll animation
+    const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -50px 0px' };
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('visible');
+      });
+    }, observerOptions);
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // Observe animatable elements
+      document.querySelectorAll('.section-title, .card, .project-card')
+        .forEach(el => observer.observe(el));
+
+      // Highlight active nav link based on current file
+      const path = location.pathname.split('/').pop() || 'index.html';
+      document.querySelectorAll('.nav-link').forEach(a => {
+        const href = a.getAttribute('href');
+        if (href && (href === path || (path === '' && href.endsWith('index.html')))) {
+          a.classList.add('active');
+        }
+      });
+    });
+  </script>
+</body>
+</html>

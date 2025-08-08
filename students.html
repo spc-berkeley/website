@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Students | SPC - Software Products @Cal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --cal-blue: #003262;
+      --cal-gold: #FDB515;
+      --light-blue: #4285f4;
+      --text-dark: #1f2937;
+      --text-light: #6b7280;
+      --bg-light: #f8fafc;
+      --white: #ffffff;
+      --shadow: 0 25px 60px -10px rgba(0,0,0,0.08);
+    }
+
+    body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: var(--text-dark); overflow-x: hidden; }
+
+    /* Header */
+    header {
+      position: fixed; top: 0; width: 100%;
+      background: rgba(255,255,255,.95); backdrop-filter: blur(10px);
+      z-index: 1000; transition: .3s;
+      border-bottom: 1px solid rgba(59,130,246,.1);
+    }
+    nav { max-width:1200px; margin:0 auto; padding:1rem 2rem; display:flex; justify-content:space-between; align-items:center; }
+    .logo { display:flex; align-items:center; color:var(--cal-blue); text-decoration:none; font-weight:700; font-size:1.5rem; }
+    .logo img { height:40px; width:auto; }
+
+    .nav-links { display:flex; list-style:none; gap:2rem; align-items:center; }
+    .nav-links li { display:flex; align-items:center; }
+
+    .nav-links a {
+      text-decoration:none; color:var(--text-dark); font-weight:500;
+      transition: color .3s; position:relative; cursor:pointer;
+    }
+    .nav-links a:hover { color: var(--light-blue); }
+    .nav-links a::after {
+      content:''; position:absolute; bottom:-5px; left:0; width:0; height:2px;
+      background: var(--cal-gold); transition: width .3s;
+    }
+    .nav-links a:hover::after, .nav-links a.active::after { width:100%; }
+
+    .mobile-menu-btn { display:none; background:none; border:none; font-size:1.5rem; color:var(--cal-blue); cursor:pointer; }
+
+    /* CTA (shared) */
+    .cta-button{
+      display:inline-block; background:var(--cal-gold); color:var(--cal-blue);
+      padding:.75rem 1.5rem; text-decoration:none; border-radius:50px;
+      font-weight:600; border:none; font-size:.9rem; position:relative; overflow:hidden;
+      transition: all .4s cubic-bezier(.25,.8,.25,1);
+    }
+    .cta-button::before{content:''; position:absolute; inset:0; left:-100%; background:linear-gradient(90deg,transparent,rgba(255,255,255,.2),transparent); transition:left .5s;}
+    .cta-button:hover::before{left:100%}
+    .cta-button:hover{ transform:translateY(-3px) scale(1.05); box-shadow:0 15px 35px rgba(253,181,21,.4); }
+
+    /* 🔒 Header Join Us — EXACT same as index, no animation */
+    .nav-links .cta-button,
+    .nav-links .cta-button:hover{
+      padding: .5rem 1rem;        /* exact size */
+      font-size: .85rem;          /* exact size */
+      transition: none;
+      transform: none;
+      box-shadow: none;
+      opacity: 1;
+      animation: none;
+    }
+    .nav-links .cta-button::before,
+    .nav-links .cta-button::after{ display:none; } /* kill shimmer + nav underline */
+    .nav-links .cta-button:hover{ color: var(--cal-blue); } /* prevent blue hover from nav rule */
+
+    /* Main */
+    main { padding-top: 8rem; }
+    .content-section { padding: 3rem 2rem; }
+    .container { max-width: 1200px; margin: 0 auto; }
+
+    .section-title {
+      text-align:center; font-size:2.5rem; font-weight:700; margin-bottom:3rem; color:var(--cal-blue);
+      position:relative; opacity:0; transform:translateY(30px); transition:.8s;
+    }
+    .section-title.visible { opacity:1; transform:translateY(0); }
+    .section-title::after {
+      content:''; position:absolute; bottom:-10px; left:50%; transform:translateX(-50%);
+      width:60px; height:4px; background:var(--cal-gold); border-radius:2px;
+    }
+
+    .about-content { font-size:1.1rem; text-align:center; max-width:800px; margin:0 auto 3rem; color:var(--text-light); }
+
+    /* Timeline */
+    .timeline-item { padding:1rem 0; border-left:3px solid var(--cal-gold); padding-left:1.5rem; margin-bottom:1rem; position:relative; }
+    .timeline-item::before { content:''; position:absolute; left:-6px; top:1.5rem; width:12px; height:12px; background:var(--cal-gold); border-radius:50%; }
+    .timeline-date { font-weight:700; color:var(--cal-blue); font-size:.9rem; }
+    .timeline-event { color:var(--text-light); margin-top:4px; font-size:.9rem; }
+
+    /* Cards */
+    .cards-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:2rem; margin-top:3rem; }
+    .card {
+      background:#fff; padding:2rem; border-radius:15px; box-shadow:0 5px 15px rgba(0,0,0,.1);
+      transition: transform .3s, box-shadow .3s; border:1px solid rgba(0,0,0,.05);
+      opacity:0; transform:translateY(30px); transition: all .8s ease;
+    }
+    .card.visible { opacity:1; transform:translateY(0); }
+    .card:hover { transform:translateY(-5px); box-shadow:0 10px 25px rgba(0,0,0,.15); }
+    .card h3 { color:var(--cal-blue); font-size:1.5rem; font-weight:600; margin-bottom:1rem; }
+    .card ul { list-style:none; padding:0; }
+    .card li { color:var(--text-light); line-height:1.6; font-size:1rem; }
+
+    .learn-more-btn { color:var(--text-dark); font-weight:600; text-decoration:none; border-bottom:2px solid var(--cal-gold); padding-bottom:2px; display:inline-block; transition:.2s; cursor:pointer; width:fit-content; margin-top:1rem; }
+    .learn-more-btn:hover { color:var(--cal-blue); border-bottom-color:var(--cal-blue); }
+
+    /* Footer */
+    footer { background:var(--cal-blue); color:#fff; padding:3rem 2rem 1rem; }
+    .footer-content { max-width:1200px; margin:0 auto; }
+    .footer-main { display:flex; align-items:center; justify-content:center; gap:2rem; margin-bottom:2rem; width:100%; }
+    .footer-content-wrapper { display:flex; align-items:center; gap:2rem; max-width:fit-content; }
+    .footer-logo img { height:60px; width:auto; }
+    .footer-text { opacity:.8; font-size:1rem; line-height:1.6; text-align:left; }
+    .footer-bottom { border-top:1px solid rgba(255,255,255,.1); padding-top:1rem; margin-top:2rem; opacity:.6; text-align:center; }
+
+    /* Mobile */
+    @media (max-width:768px){
+      .nav-links{
+        flex-direction:column; position:absolute; top:100%; left:0; width:100%;
+        background:rgba(255,255,255,.98); backdrop-filter:blur(10px);
+        padding:1rem 2rem; display:none; align-items:flex-start;
+      }
+      .nav-links.mobile-open{display:flex}
+      .mobile-menu-btn{display:block}
+      .cards-grid{grid-template-columns:1fr}
+      .footer-main{flex-direction:column; text-align:center; gap:1rem}
+      .footer-content-wrapper{flex-direction:column; text-align:center; gap:1rem}
+      .footer-text{text-align:center}
+    }
+
+    html{ scroll-behavior: smooth; }
+  </style>
+</head>
+<body>
+  <header>
+    <nav>
+      <a class="logo" href="index.html"><img src="assets/img/spc-logo.png" alt="SPC Logo"></a>
+      <button class="mobile-menu-btn" onclick="toggleMobileMenu()">☰</button>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html" class="nav-link">Home</a></li>
+        <li><a href="about.html" class="nav-link">About</a></li>
+        <li><a href="students.html" class="nav-link active">Students</a></li>
+        <li><a href="projects.html" class="nav-link">Projects</a></li>
+        <li><a href="team.html" class="nav-link">Team</a></li>
+        <li><a href="events.html" class="nav-link">Events</a></li>
+        <li><a class="cta-button" href="https://forms.gle/your-form-id" target="_blank" rel="noopener">Join Us</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section class="content-section">
+      <div class="container">
+        <h2 class="section-title">Join Our Community</h2>
+        <div class="about-content">
+          <p>Ready to launch your product management career? Here's how to join SPC and become part of our vibrant community.</p>
+        </div>
+
+        <div class="two-column-layout" style="display:grid;grid-template-columns:1fr 1fr;gap:3rem;margin-top:2rem;align-items:start;">
+          <div>
+            <h3 style="font-size:1.8rem;font-weight:700;color:var(--cal-blue);margin-bottom:2rem;text-align:center;">What We Offer</h3>
+            <div style="display:flex;flex-direction:column;gap:1.5rem;">
+              <div class="card">
+                <h3>Mentorship Track</h3>
+                <ul>
+                  <li>Focuses on building foundational product skills, covering topics like customer segmentation, value propositions, business model canvases (BMC), and more.<br/><br/>This is a great option if you are new to product management and are interested in learning.</li>
+                </ul>
+              </div>
+              <div class="card">
+                <h3>Client Track</h3>
+                <ul><li>Projects with clients - UX, business strategy, product focus</li></ul>
+                <a href="projects.html" class="learn-more-btn">Learn More</a>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <h3 style="font-size:1.8rem;font-weight:700;color:var(--cal-blue);margin-bottom:2rem;text-align:center;">Application Timeline</h3>
+            <div class="card">
+              <div style="margin-top:1rem;">
+                <div class="timeline-item"><div class="timeline-date">February 1-15</div><div class="timeline-event">Applications Open</div></div>
+                <div class="timeline-item"><div class="timeline-date">February 16-28</div><div class="timeline-event">Application Review</div></div>
+                <div class="timeline-item"><div class="timeline-date">March 1-10</div><div class="timeline-event">First Round Interviews*</div></div>
+                <div class="timeline-item"><div class="timeline-date">March 11-15</div><div class="timeline-event">Final Round Interviews*</div></div>
+                <div class="timeline-item"><div class="timeline-date">March 20</div><div class="timeline-event">Offers Extended</div></div>
+                <div class="timeline-item"><div class="timeline-date">March 25</div><div class="timeline-event">New Member Orientation</div></div>
+              </div>
+              <p style="font-size:.75rem;color:var(--text-light);font-style:italic;margin-top:1rem;text-align:right;">*Invite only</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="join-us-section" style="text-align:center;margin:2rem 0;">
+          <a class="cta-button" href="https://forms.gle/your-form-id" target="_blank" rel="noopener">Join Us Today</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-main">
+        <div class="footer-content-wrapper">
+          <div class="footer-logo"><img src="assets/img/spc-logo-full.png" alt="SPC Full Logo"></div>
+          <div class="footer-text">Berkeley Chapter of the International Software Product Management Association (ISPMA)<br>Empowering the next generation of product managers through education, experience, and community.</div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 SPC - Software Products @Cal. All rights reserved. |
+          <a href="mailto:ispma.berkeley@gmail.com" style="color: var(--cal-gold); text-decoration: none;">Contact</a>
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function toggleMobileMenu(){ document.getElementById('navLinks').classList.toggle('mobile-open'); }
+
+    window.addEventListener('scroll',function(){
+      const header=document.querySelector('header');
+      header.style.backgroundColor = (window.scrollY>50)?'rgba(255,255,255,.98)':'rgba(255,255,255,.95)';
+    });
+
+    const observer=new IntersectionObserver((entries)=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');})},{threshold:.1,rootMargin:'0px 0px -50px 0px'});
+    document.addEventListener('DOMContentLoaded',()=>{
+      document.querySelectorAll('.section-title,.timeline-card,.card').forEach(el=>observer.observe(el));
+      const path=location.pathname.split('/').pop()||'index.html';
+      document.querySelectorAll('.nav-link').forEach(a=>{const href=a.getAttribute('href'); if(href&&(href===path||(path===''&&href.endsWith('index.html')))) a.classList.add('active');});
+    });
+  </script>
+</body>
+</html>

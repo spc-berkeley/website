@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Projects | SPC - Software Products @Cal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --cal-blue: #003262;
+      --cal-gold: #FDB515;
+      --light-blue: #4285f4;
+      --text-dark: #1f2937;
+      --text-light: #6b7280;
+      --bg-light: #f8fafc;
+      --white: #ffffff;
+    }
+
+    body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: var(--text-dark); overflow-x: hidden; }
+
+    /* Header */
+    header {
+      position: fixed; top: 0; width: 100%;
+      background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px);
+      z-index: 1000; transition: all 0.3s ease;
+      border-bottom: 1px solid rgba(59, 130, 246, 0.1);
+    }
+
+    nav {
+      max-width: 1200px; margin: 0 auto; padding: 1rem 2rem;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+
+    .logo { font-size: 1.5rem; font-weight: 700; color: var(--cal-blue); text-decoration: none; cursor: pointer; display: flex; align-items: center; }
+    .logo img { height: 40px; width: auto; }
+
+    .nav-links { display: flex; list-style: none; gap: 2rem; align-items: center; }
+    .nav-links li { display: flex; align-items: center; }
+
+    .nav-links a {
+      text-decoration: none; color: var(--text-dark); font-weight: 500;
+      transition: color 0.3s ease; position: relative; cursor: pointer;
+    }
+    .nav-links a:hover { color: var(--light-blue); }
+
+    .nav-links a::after {
+      content: ''; position: absolute; bottom: -5px; left: 0;
+      width: 0; height: 2px; background: var(--cal-gold); transition: width 0.3s ease;
+    }
+    .nav-links a:hover::after, .nav-links a.active::after { width: 100%; }
+
+    .mobile-menu-btn { display: none; background: none; border: none; font-size: 1.5rem; color: var(--cal-blue); cursor: pointer; }
+
+    /* Main content */
+    main { padding-top: 8rem; }
+    .content-section { padding: 5rem 2rem; }
+    .container { max-width: 1200px; margin: 0 auto; }
+
+    .section-title {
+      text-align: center; font-size: 2.5rem; font-weight: 700; margin-bottom: 3rem; color: var(--cal-blue);
+      position: relative; opacity: 0; transform: translateY(30px); transition: all 0.8s ease;
+    }
+    .section-title.visible { opacity: 1; transform: translateY(0); }
+
+    .section-title::after {
+      content: ''; position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%);
+      width: 60px; height: 4px; background: var(--cal-gold); border-radius: 2px;
+    }
+
+    .about-content { font-size: 1.1rem; text-align: center; max-width: 800px; margin: 0 auto 3rem; color: var(--text-light); }
+
+    .project-card {
+      background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+      margin-bottom: 1.5rem; border-top: 3px solid var(--cal-gold);
+      transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+      opacity: 0; transform: translateY(30px);
+    }
+    .project-card.visible { opacity: 1; transform: translateY(0); }
+    .project-card:hover { transform: translateY(-4px) scale(1.01); box-shadow: 0 12px 25px rgba(0,0,0,0.12); border-top-color: var(--light-blue); }
+
+    .project-meta { margin-bottom: 1rem; }
+    .project-tag {
+      display: inline-block; background: var(--bg-light); color: var(--cal-blue);
+      padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.8rem; font-weight: 600;
+      margin-right: 0.5rem; margin-bottom: 0.5rem;
+    }
+    .project-card h3 { color: var(--cal-blue); margin-bottom: 0.75rem; font-size: 1.25rem; transition: color 0.3s ease; }
+    .project-card:hover h3 { color: var(--light-blue); }
+    .project-card p { color: var(--text-light); margin-bottom: 0.75rem; font-size: 0.95rem; }
+    .project-card ul { list-style: none; margin-top: 0.75rem; }
+    .project-card li { color: var(--text-light); margin-bottom: 0.4rem; font-size: 0.9rem; }
+    .project-card li::before { content: '→'; color: var(--cal-gold); margin-right: 0.5rem; font-weight: bold; }
+
+    /* Footer */
+    footer { background: var(--cal-blue); color: white; padding: 3rem 2rem 1rem; }
+    .footer-content { max-width: 1200px; margin: 0 auto; }
+    .footer-main { display: flex; align-items: center; justify-content: center; gap: 2rem; margin-bottom: 2rem; width: 100%; }
+    .footer-content-wrapper { display: flex; align-items: center; gap: 2rem; max-width: fit-content; }
+    .footer-logo img { height: 60px; width: auto; }
+    .footer-text { opacity: 0.8; font-size: 1rem; line-height: 1.6; text-align: left; }
+    .footer-bottom { border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 1rem; margin-top: 2rem; opacity: 0.6; text-align: center; }
+
+    /* 🔒 Header Join Us — exact size + no animation */
+    .cta-button {
+      display: inline-block; background: var(--cal-gold); color: var(--cal-blue);
+      padding: 0.75rem 1.5rem; text-decoration: none; border-radius: 50px;
+      font-weight: 600; border: none; font-size: 0.9rem; position: relative; overflow: hidden;
+      transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+    .cta-button::before { content: ''; position: absolute; inset: 0; left: -100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,.2), transparent); transition: left .5s; }
+    .cta-button:hover::before { left: 100%; }
+    .cta-button:hover { transform: translateY(-3px) scale(1.05); box-shadow: 0 15px 35px rgba(253,181,21,0.4); }
+
+    .nav-links .cta-button,
+    .nav-links .cta-button:hover {
+      padding: 0.5rem 1rem;   /* exact header size */
+      font-size: 0.85rem;     /* exact header size */
+      transition: none;
+      transform: none;
+      box-shadow: none;
+      animation: none;
+    }
+    .nav-links .cta-button::before,
+    .nav-links .cta-button::after { display: none; } /* no shimmer, no underline */
+    .nav-links .cta-button:hover { color: var(--cal-blue); } /* prevent blue hover */
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+      .nav-links {
+        flex-direction: column; position: absolute; top: 100%; left: 0; width: 100%;
+        background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(10px);
+        padding: 1rem 2rem; display: none;
+      }
+      .nav-links.mobile-open { display: flex; }
+      .mobile-menu-btn { display: block; }
+
+      .section-title { font-size: 2rem; }
+      .project-card { padding: 1.5rem; }
+
+      .footer-main { flex-direction: column; text-align: center; gap: 1rem; }
+      .footer-content-wrapper { flex-direction: column; text-align: center; gap: 1rem; }
+      .footer-text { text-align: center; }
+    }
+
+    html { scroll-behavior: smooth; }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <nav>
+      <a class="logo" href="index.html">
+        <img src="assets/img/spc-logo.png" alt="SPC Logo">
+      </a>
+      <button class="mobile-menu-btn" onclick="toggleMobileMenu()">☰</button>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html" class="nav-link">Home</a></li>
+        <li><a href="about.html" class="nav-link">About</a></li>
+        <li><a href="students.html" class="nav-link">Students</a></li>
+        <li><a href="projects.html" class="nav-link active">Projects</a></li>
+        <li><a href="team.html" class="nav-link">Team</a></li>
+        <li><a href="events.html" class="nav-link">Events</a></li>
+        <!-- Join Us (same size as index, no animation) -->
+        <li><a class="cta-button" href="https://forms.gle/your-form-id" target="_blank" rel="noopener">Join Us</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Main -->
+  <main>
+    <section class="content-section">
+      <div class="container">
+        <h2 class="section-title">Client Projects</h2>
+        <div class="about-content">
+          <p>Hands-on projects with real clients. Collaborate, ideate, and ship recommendations that matter.</p>
+        </div>
+
+        <div class="project-card">
+          <div class="project-meta">
+            <span class="project-tag">E-commerce</span>
+            <span class="project-tag">Mobile App</span>
+            <span class="project-tag">Spring 2024</span>
+          </div>
+          <h3>E-commerce Platform Optimization</h3>
+          <p>Improved mobile UX, +25% conversion, +40% retention.</p>
+          <ul>
+            <li>User research and analytics review</li>
+            <li>Checkout flow redesign</li>
+            <li>A/B testing framework</li>
+            <li>Implementation roadmap</li>
+          </ul>
+        </div>
+
+        <div class="project-card">
+          <div class="project-meta">
+            <span class="project-tag">FinTech</span>
+            <span class="project-tag">B2B SaaS</span>
+            <span class="project-tag">Fall 2023</span>
+          </div>
+          <h3>Financial Software Product Strategy</h3>
+          <p>Market analysis, positioning, and GTM for a new B2B product.</p>
+          <ul>
+            <li>Research + competitive analysis</li>
+            <li>Segment & value prop</li>
+            <li>Roadmap & prioritization</li>
+            <li>Exec presentation</li>
+          </ul>
+        </div>
+
+        <div class="project-card">
+          <div class="project-meta">
+            <span class="project-tag">HealthTech</span>
+            <span class="project-tag">Consumer App</span>
+            <span class="project-tag">Spring 2023</span>
+          </div>
+          <h3>Healthcare App User Engagement</h3>
+          <p>+60% DAU via onboarding and personalized notifications.</p>
+          <ul>
+            <li>Behavior analysis</li>
+            <li>New onboarding</li>
+            <li>Personalized notifications</li>
+            <li>Metrics dashboard</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-content">
+      <div class="footer-main">
+        <div class="footer-content-wrapper">
+          <div class="footer-logo">
+            <img src="assets/img/spc-logo-full.png" alt="SPC Full Logo">
+          </div>
+          <div class="footer-text">
+            Berkeley Chapter of the International Software Product Management Association (ISPMA)<br>
+            Empowering the next generation of product managers through education, experience, and community.
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 SPC - Software Products @Cal. All rights reserved. |
+          <a href="mailto:ispma.berkeley@gmail.com" style="color: var(--cal-gold); text-decoration: none;">Contact</a>
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function toggleMobileMenu() {
+      const navLinks = document.getElementById('navLinks');
+      navLinks.classList.toggle('mobile-open');
+    }
+
+    // Header scroll effect
+    window.addEventListener('scroll', function() {
+      const header = document.querySelector('header');
+      header.style.backgroundColor = (window.scrollY > 50)
+        ? 'rgba(255, 255, 255, 0.98)'
+        : 'rgba(255, 255, 255, 0.95)';
+    });
+
+    // Reveal-on-scroll animation
+    const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -50px 0px' };
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+    }, observerOptions);
+
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.project-card, .section-title').forEach(el => observer.observe(el));
+
+      const path = location.pathname.split('/').pop() || 'index.html';
+      document.querySelectorAll('.nav-link').forEach(a => {
+        const href = a.getAttribute('href');
+        if (href && (href === path || (path === '' && href.endsWith('index.html')))) a.classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>
