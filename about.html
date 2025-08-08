@@ -132,7 +132,7 @@
         </div>
         <div class="split-right">
           <div class="image-wrapper">
-            <img id="missionImg" class="carousel-img" src="assets/img/BLC_Leadership_7.jpg" alt="SPC Mission">
+            <img id="missionImg" class="carousel-img" src="assets/img/about/BLC_Leadership_7.jpg" alt="SPC Mission">
           </div>
         </div>
       </div>
@@ -142,7 +142,7 @@
       <div class="split-section">
         <div class="split-right">
           <div class="image-wrapper">
-            <img id="benefitsImg" class="carousel-img" src="assets/img/confetti.jpg" alt="SPC Benefits">
+            <img id="benefitsImg" class="carousel-img" src="assets/img/about/retreat_fa24.jpg" alt="SPC Benefits">
           </div>
         </div>
         <div class="split-left">
@@ -207,8 +207,7 @@
     }
     
     window.addEventListener('load', function() {
-      document.getElementById('missionImg').src = missionImages[0];
-      document.getElementById('benefitsImg').src = benefitsImages[0];
+      // Images are already set in HTML, just start the rotation
       setInterval(rotateMissionImages, 3000);
       setInterval(rotateBenefitsImages, 3000);
     });
