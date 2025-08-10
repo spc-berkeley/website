@@ -142,8 +142,8 @@
         <div class="split-right">
           <div class="image-wrapper">
             <div class="image-stack">
-              <img id="missionImgA" class="is-active" src="assets/img/about/BLC_Leadership_7.jpg" alt="SPC Mission">
-              <img id="missionImgB" alt="">
+              <img id="missionImgA" class="is-active" src="assets/img/about/BLC_Leadership_7.jpg" alt="SPC Mission" loading="eager" decoding="async">
+              <img id="missionImgB" alt="" decoding="async">
             </div>
           </div>
         </div>
@@ -155,8 +155,8 @@
         <div class="split-right">
           <div class="image-wrapper">
             <div class="image-stack">
-              <img id="benefitsImgA" class="is-active" src="assets/img/about/retreat_fa24.jpg" alt="SPC Benefits">
-              <img id="benefitsImgB" alt="">
+              <img id="benefitsImgA" class="is-active" src="assets/img/about/retreat_fa24.jpg" alt="SPC Benefits" loading="eager" decoding="async">
+              <img id="benefitsImgB" alt="" decoding="async">
             </div>
           </div>
         </div>
@@ -204,7 +204,7 @@
       });
     });
 
-    // --- Carousel (preload + cross-fade, no flicker) ---
+    // --- Carousels: robust cross-fade (never freezes) ---
     const missionImages = [
       'assets/img/about/BLC_Leadership_7.jpg',
       'assets/img/about/indiasummit.jpg',
@@ -221,26 +221,34 @@
     ];
 
     function setupCarousel(idPrefix, images, intervalMs=3000){
-      const imgA = document.getElementById(idPrefix+'A');
-      const imgB = document.getElementById(idPrefix+'B');
-      let showing = imgA, hidden = imgB, idx = 0;
+      const a = document.getElementById(idPrefix+'A');
+      const b = document.getElementById(idPrefix+'B');
+      let showing = a, hidden = b, idx = 0;
 
-      // warm the cache
+      // best-effort preload
       images.forEach(src => { const i=new Image(); i.src=src; });
 
-      function tick(){
+      function advance(){
         idx = (idx + 1) % images.length;
         const nextSrc = images[idx];
-        const tmp = new Image();
-        tmp.onload = () => {
-          hidden.src = nextSrc;
+
+        hidden.src = nextSrc;
+
+        const doSwap = () => {
           hidden.classList.add('is-active');
           showing.classList.remove('is-active');
-          [showing, hidden] = [hidden, showing]; // swap refs
+          [showing, hidden] = [hidden, showing];
         };
-        tmp.src = nextSrc;
+
+        if (hidden.complete) {
+          doSwap();
+        } else {
+          hidden.onload = doSwap;
+          hidden.onerror = doSwap; // keep cycling even if an image fails
+        }
       }
-      return setInterval(tick, intervalMs);
+
+      return setInterval(advance, intervalMs);
     }
 
     window.addEventListener('load', () => {
