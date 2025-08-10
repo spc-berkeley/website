@@ -80,15 +80,34 @@
     .project-card.visible { opacity: 1; transform: translateY(0); }
     .project-card:hover { transform: translateY(-4px) scale(1.01); box-shadow: 0 12px 25px rgba(0,0,0,0.12); border-top-color: var(--light-blue); }
 
-    .project-meta { margin-bottom: 1rem; }
+    .project-meta { 
+      margin-bottom: 1rem; 
+      display: flex;                 /* NEW: align logo + tags inline */
+      align-items: center; 
+      gap: .5rem;
+    }
+    .project-logo{                    /* NEW: Sweetgreen logo size */
+      width: 48px;
+      height: 48px;
+      object-fit: contain;
+      border-radius: 8px;
+      flex: 0 0 48px;
+    }
     .project-tag {
       display: inline-block; background: var(--bg-light); color: var(--cal-blue);
       padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.8rem; font-weight: 600;
       margin-right: 0.5rem; margin-bottom: 0.5rem;
     }
-    .project-card h3 { color: var(--cal-blue); margin-bottom: 0.75rem; font-size: 1.25rem; transition: color 0.3s ease; }
+    .project-card h3 { 
+      color: var(--cal-blue); 
+      margin-bottom: 0.5rem; 
+      font-size: 1.35rem;           /* a touch larger */
+      font-weight: 700;             /* NEW: bold like screenshot */
+      transition: color 0.3s ease; 
+    }
     .project-card:hover h3 { color: var(--light-blue); }
-    .project-card p { color: var(--text-light); margin-bottom: 0.75rem; font-size: 0.95rem; }
+    .project-card p { color: var(--text-dark); margin-bottom: 0.5rem; font-size: 1.02rem; }
+
     .project-card ul { list-style: none; margin-top: 0.75rem; }
     .project-card li { color: var(--text-light); margin-bottom: 0.4rem; font-size: 0.9rem; }
     .project-card li::before { content: '→'; color: var(--cal-gold); margin-right: 0.5rem; font-weight: bold; }
@@ -115,16 +134,16 @@
 
     .nav-links .cta-button,
     .nav-links .cta-button:hover {
-      padding: 0.5rem 1rem;   /* exact header size */
-      font-size: 0.85rem;     /* exact header size */
+      padding: 0.5rem 1rem;
+      font-size: 0.85rem;
       transition: none;
       transform: none;
       box-shadow: none;
       animation: none;
     }
     .nav-links .cta-button::before,
-    .nav-links .cta-button::after { display: none; } /* no shimmer, no underline */
-    .nav-links .cta-button:hover { color: var(--cal-blue); } /* prevent blue hover */
+    .nav-links .cta-button::after { display: none; }
+    .nav-links .cta-button:hover { color: var(--cal-blue); }
 
     /* Mobile Responsive */
     @media (max-width: 768px) {
@@ -162,7 +181,6 @@
         <li><a href="projects.html" class="nav-link active">Projects</a></li>
         <li><a href="team.html" class="nav-link">Team</a></li>
         <li><a href="events.html" class="nav-link">Events</a></li>
-        <!-- Join Us (same size as index, no animation) -->
         <li><a class="cta-button" href="https://forms.gle/your-form-id" target="_blank" rel="noopener">Join Us</a></li>
       </ul>
     </nav>
@@ -177,20 +195,20 @@
           <p>Hands-on projects with real clients. Collaborate, ideate, and ship recommendations that matter.</p>
         </div>
 
+        <!-- Sweetgreen card -->
         <div class="project-card">
           <div class="project-meta">
-            <span class="project-tag">E-commerce</span>
-            <span class="project-tag">Mobile App</span>
-            <span class="project-tag">Spring 2024</span>
+            <img
+              src="assets/img/sweetgreen.png"
+              alt="Sweetgreen logo"
+              class="project-logo"
+              loading="lazy"
+            />
+            <span class="project-tag">Sweetgreen</span>
+            <span class="project-tag">Spring 2025</span>
           </div>
-          <h3>E-commerce Platform Optimization</h3>
-          <p>Improved mobile UX, +25% conversion, +40% retention.</p>
-          <ul>
-            <li>User research and analytics review</li>
-            <li>Checkout flow redesign</li>
-            <li>A/B testing framework</li>
-            <li>Implementation roadmap</li>
-          </ul>
+          <h3>Retention Strategy</h3>
+          <p>Designed internal pulse survey system projecting 15% retention lift and $300K in cost savings.</p>
         </div>
 
         <div class="project-card">
